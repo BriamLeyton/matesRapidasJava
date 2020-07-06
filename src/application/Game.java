@@ -36,7 +36,7 @@ public class Game extends Application {
 
     private Player activePlayer;
 
-    Integer selectedBoxes = 0;
+    private int selectedBoxes = 0;
 
     Game(Config configuration) {
         config = configuration;
@@ -101,6 +101,7 @@ public class Game extends Application {
     }
 
     private void showModalOperation() {
+        System.out.print(1232);
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(this.gameStage);
@@ -138,11 +139,12 @@ public class Game extends Application {
 
         private void listenSelectedBox(int num) {
             show();
-            if (1 == ++selectedBoxes) {
+            ++selectedBoxes;
+            if (1 == selectedBoxes) {
                 PlayerSelection playerSelection = new PlayerSelection();
                 playerSelection.setSelectionOne(num);
                 activePlayer.addPlayerSelection(playerSelection);
-            } else if (2 == ++selectedBoxes) {
+            } else if (2 == selectedBoxes) {
                 List<PlayerSelection> playerSelection1 = activePlayer.getPlayerSelection();
                 PlayerSelection playerSelection = playerSelection1.get(playerSelection1.size() - 1);
                 playerSelection.setSelectionTwo(num);
