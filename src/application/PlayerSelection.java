@@ -47,7 +47,6 @@ public class PlayerSelection {
 
     public void setPlayerResult(float playerResult) {
         this.playerResult = playerResult;
-        this.evaluateResult();
     }
 
     public void makeOperation() throws Exception {
@@ -67,10 +66,11 @@ public class PlayerSelection {
             default:
                 throw new Exception("Operations doesn't exist");
         }
+        evaluateResult();
     }
 
     private void evaluateResult() {
-        this.isValid = resultOperation == playerResult;
+        this.isValid = getResultOperation() == getPlayerResult();
     }
 
     public boolean isValid() {

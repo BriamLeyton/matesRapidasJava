@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Arrays;
+
 public class Config {
 
     static final String DIFFICULTY_EASY = "easy";
@@ -55,6 +57,31 @@ public class Config {
             default:
                 return normal;
         }
+    }
+
+    public String[] getDifficultyOperationConfig() {
+        String[] operations;
+        switch (this.difficulty) {
+            case DIFFICULTY_EASY:
+                operations = new String[2];
+                operations[0] = Operations.SUM;
+                operations[1] = Operations.SUBTRACTION;
+                break;
+            case DIFFICULTY_HARD:
+                operations = new String[4];
+                operations[0] = Operations.SUM;
+                operations[1] = Operations.SUBTRACTION;
+                operations[2] = Operations.MULTIPLICATION;
+                operations[3] = Operations.DIVISION;
+                break;
+            default:
+                operations = new String[3];
+                operations[0] = Operations.SUM;
+                operations[1] = Operations.SUBTRACTION;
+                operations[2] = Operations.MULTIPLICATION;
+        }
+
+        return operations;
     }
 
 }

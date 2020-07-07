@@ -2,12 +2,16 @@ package application;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,6 +42,8 @@ public class Game extends Application {
 
     private int selectedBoxes = 0;
 
+    private Boxes[][] boxes;
+
     Game(Config configuration) {
         config = configuration;
     }
@@ -54,7 +60,7 @@ public class Game extends Application {
 
         initializerPlayers();
 
-        Boxes[][] boxes = new Boxes[config.getRows()][config.getCols()];
+        boxes = new Boxes[config.getRows()][config.getCols()];
         Random random = new Random();
         IntStream intStream = random.ints(config.getCols() * config.getRows(), config.getMinCardValue(), config.getMaxCardValue());
         Iterator iterator = intStream.iterator();
@@ -101,21 +107,87 @@ public class Game extends Application {
     }
 
     private void showModalOperation() {
-        System.out.print(1232);
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(this.gameStage);
 
+        List<PlayerSelection> playerSelection1 = activePlayer.getPlayerSelection();
+        PlayerSelection playerSelection = playerSelection1.get(playerSelection1.size() - 1);
+
+        String[] operations = config.getDifficultyOperationConfig();
+        String randomOperation = (operations[new Random().nextInt(operations.length)]);
+        playerSelection.setOperation(randomOperation);
+
+        System.out.print(playerSelection.getOperation());
+
+        String operator = "";
+        switch (playerSelection.getOperation()) {
+            case Operations.SUM:
+                operator = "+";
+                break;
+            case Operations.SUBTRACTION:
+                operator = "-";
+                break;
+            case Operations.MULTIPLICATION:
+                operator = "*";
+                break;
+            case Operations.DIVISION:
+                operator = "/";
+                break;
+        }
+
+        Text operator1 = new Text(Integer.toString(playerSelection.getSelectionOne()));
+        Text operation = new Text(operator);
+        Text operator2 = new Text(Integer.toString(playerSelection.getSelectionTwo()));
+        Text equal = new Text("=");
         TextField result = new TextField();
+        result.setOnKeyPressed(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent ke)
+            {
+                if (ke.getCode().equals(KeyCode.ENTER))
+                {
+                    if (null == result.getText()){
+                        return;
+                    }
+                    try {
+                        playerSelection.setPlayerResult(Float.parseFloat(result.getText()));
+                        playerSelection.makeOperation();
+                        if (playerSelection.isValid()) {
+                            activePlayer.gainPoint();
+                        }
+                        dialog.hide();
+
+                        for (int i = 0; i < config.getCols(); i++) {
+                            for (int j = 0; j < config.getRows(); j++) {
+                                boxes[j][i].hide();
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        System.out.print(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        HBox operationContainer = new HBox(10);
+        operationContainer.setAlignment(Pos.CENTER);
+        operationContainer.getChildren().addAll(operator1, operation, operator2, equal, result);
 
         HBox dialogVbox = new HBox(20);
-        dialogVbox.getChildren().add(new Text("This is a Dialog"));
+        dialogVbox.getChildren().add(new Text("Resuelve la Operacion"));
+        dialogVbox.setAlignment(Pos.CENTER);
 
         VBox container = new VBox(10);
-        container.getChildren().addAll(dialogVbox, result);
+        container.setAlignment(Pos.CENTER);
+        container.getChildren().addAll(dialogVbox, operationContainer);
 
-        Scene dialogScene = new Scene(container, 450, 400);
+        Scene dialogScene = new Scene(container, 350, 200);
         dialog.setScene(dialogScene);
+        dialog.setResizable(false);
         dialog.show();
     }
 
