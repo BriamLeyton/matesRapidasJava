@@ -106,6 +106,14 @@ public class Game extends Application {
         activePlayer = players[0];
     }
 
+    public void changeActivePlayer(){
+        if (players[0] == activePlayer) {
+            activePlayer = players[1];
+        }else {
+            activePlayer = players[0];
+        }
+    }
+
     private void showModalOperation() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -118,7 +126,6 @@ public class Game extends Application {
         String randomOperation = (operations[new Random().nextInt(operations.length)]);
         playerSelection.setOperation(randomOperation);
 
-        System.out.print(playerSelection.getOperation());
 
         String operator = "";
         switch (playerSelection.getOperation()) {
@@ -157,13 +164,16 @@ public class Game extends Application {
                         if (playerSelection.isValid()) {
                             activePlayer.gainPoint();
                         }
+                        System.out.println(activePlayer.getId() + " - Puntos: " + activePlayer.getPoints());
                         dialog.hide();
+                        selectedBoxes = 0;
 
                         for (int i = 0; i < config.getCols(); i++) {
                             for (int j = 0; j < config.getRows(); j++) {
                                 boxes[j][i].hide();
                             }
                         }
+                        changeActivePlayer();
 
                     } catch (Exception e) {
                         System.out.print(e.getMessage());
