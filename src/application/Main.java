@@ -12,15 +12,29 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * el metodo Main ejecuta la aplicacion principal
+ */
 public class Main extends Application {
 
     private Config config;
 
+    /**
+     * Init: carga la configuracion por defecto de las variables de juego
+     * cantidad jugadores y dificultad
+     * @throws Exception
+     */
     @Override
     public void init() throws Exception {
         config = new Config();
     }
 
+    /**
+     * start se encarga de carga la primera escena
+     * @param primaryStage carga los botones pricipales start game y help asi como sus ubicaciones
+     *                     dentro de la escena
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 

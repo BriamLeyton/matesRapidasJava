@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+/**
+ * clase principal para la configuracion del juego segun el input del usuario
+ */
 public class GameConfiguration extends Application {
 
     private int number = 1;
@@ -23,6 +26,10 @@ public class GameConfiguration extends Application {
         config = configuration;
     }
 
+    /**
+     * @param stage define la scena con la que iniciara el juego
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         gameStage = stage;
@@ -48,6 +55,12 @@ public class GameConfiguration extends Application {
         stage.show();
     }
 
+    /**
+     * @param stage para la creacion de los botones de seleccion
+     * @param label literal del boton
+     * @param palyers cantidad de jugadores
+     * @return retorna el boton con el evento seteado y las varibles aplicadas
+     */
     private Button createPlayerButton(Stage stage, String label, int palyers) {
         Button onePlayer = new Button(label);
         onePlayer.setOnAction(new EventHandler<ActionEvent>() {
@@ -60,6 +73,9 @@ public class GameConfiguration extends Application {
         return onePlayer;
     }
 
+    /**
+     * @return retorna la escena preconfigurada de la seleccion del nivel con los tres botones easy, normal, hard
+     */
     private static Scene difficulty() {
         Button easyBtn = createDifficultyButton(Config.DIFFICULTY_EASY);
         Button normalBtn = createDifficultyButton(Config.DIFFICULTY_NORMAL);
@@ -79,6 +95,11 @@ public class GameConfiguration extends Application {
         return new Scene(panelMain, 400, 400);
     }
 
+    /**
+     * @param difficulty segun el nivel de dificultad que se envie en el parametro,
+     *                   se configura con el evento listenDifficultyBtnSelector
+     * @return
+     */
     private static Button createDifficultyButton(String difficulty) {
         Button button = new Button(difficulty.toUpperCase());
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,6 +111,11 @@ public class GameConfiguration extends Application {
         return button;
     }
 
+
+    /**
+     * @param difficulty recibe la dificultad elegida por el usuario, la configura
+     *                  en el config y da inicio a la escena
+     */
     private static void listenDifficultyBtnSelector(String difficulty) {
         config.setDifficulty(difficulty);
         Application game = new Game(config);
