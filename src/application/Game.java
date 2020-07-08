@@ -2,12 +2,12 @@ package application;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -106,10 +106,15 @@ public class Game extends Application {
         activePlayer = players[0];
     }
 
-    public void changeActivePlayer(){
+    public void changeActivePlayer() {
+
+        if (1 == players.length) {
+            return;
+        }
+
         if (players[0] == activePlayer) {
             activePlayer = players[1];
-        }else {
+        } else {
             activePlayer = players[0];
         }
     }
@@ -148,14 +153,11 @@ public class Game extends Application {
         Text operator2 = new Text(Integer.toString(playerSelection.getSelectionTwo()));
         Text equal = new Text("=");
         TextField result = new TextField();
-        result.setOnKeyPressed(new EventHandler<KeyEvent>()
-        {
+        result.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
-            public void handle(KeyEvent ke)
-            {
-                if (ke.getCode().equals(KeyCode.ENTER))
-                {
-                    if (null == result.getText()){
+            public void handle(KeyEvent ke) {
+                if (ke.getCode().equals(KeyCode.ENTER)) {
+                    if (null == result.getText()) {
                         return;
                     }
                     try {
@@ -173,6 +175,32 @@ public class Game extends Application {
                                 boxes[j][i].hide();
                             }
                         }
+
+                        if (5 == activePlayer.getPoints()) {
+                            System.out.println("Winner: " + activePlayer.getId());
+
+                            Text resultText = new Text("RESULT");
+                            Text winnerText = new Text("Winner: " + activePlayer.getId() + " with " + activePlayer.getPoints() + " points.");
+                            Button newGame = new Button("New Game!");
+                            newGame.setOnMouseClicked(mouseEvent -> {
+                                try {
+                                    gameStage.hide();
+                                    Main main = new Main();
+                                    main.start(new Stage());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+
+                            VBox containerResult = new VBox(15);
+                            containerResult.setAlignment(Pos.CENTER);
+                            containerResult.getChildren().addAll(resultText, winnerText, newGame);
+
+                            Scene resultScene = new Scene(containerResult, 250, 250);
+                            dialog.setScene(resultScene);
+                            dialog.show();
+                        }
+
                         changeActivePlayer();
 
                     } catch (Exception e) {
