@@ -118,6 +118,10 @@ public class Game extends Application {
      */
     public void changeActivePlayer() {
 
+        if (1 == players.length) {
+            return;
+        }
+
         if (players[0] == activePlayer) {
             activePlayer = players[1];
         } else {
