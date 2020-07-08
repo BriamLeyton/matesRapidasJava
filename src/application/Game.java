@@ -48,6 +48,10 @@ public class Game extends Application {
         config = configuration;
     }
 
+    /**
+     * @param stage escena en la que se da inicio a la seleccion de cajas para el usuario
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         gameStage = stage;
@@ -97,6 +101,9 @@ public class Game extends Application {
         gameStage.show();
     }
 
+    /**
+     * configura el juego segun los jugadores seleccionados en el inicio del juego
+     */
     private void initializerPlayers() {
         int configPlayers = config.getPlayers();
         players = new Player[configPlayers];
@@ -106,6 +113,9 @@ public class Game extends Application {
         activePlayer = players[0];
     }
 
+    /**
+     * cambia el jugador cuando termina su turno
+     */
     public void changeActivePlayer(){
         if (players[0] == activePlayer) {
             activePlayer = players[1];
@@ -114,6 +124,9 @@ public class Game extends Application {
         }
     }
 
+    /**
+     * muestra el cuadro de dialogo con la operacion propuesta segun las cajas seleccionada
+     */
     private void showModalOperation() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -201,6 +214,9 @@ public class Game extends Application {
         dialog.show();
     }
 
+    /**
+     * clase para crear las cajas que seleccionara el usuario
+     */
     public class Boxes extends GridPane {
         //Text numText = new Text();
         Label numText = new Label();
